@@ -34,12 +34,12 @@ def receive_file():
     sent_entropy = message['entropy']
 
     msg_list = de.convert_to_binary_str(enc_file, num_bytes, n)
-    decoded_msg, caught_errors = de.decode(msg_list, gen_poly, encoding)
+    decoded_msg, caught_errors, fixed_errors = de.decode(msg_list, gen_poly, encoding)
 
     decompressed_file = com.decompress(decoded_msg, comp_code)
 
     return flask.render_template('decode.html', 
-                                 sent_errors=sent_errors, caught_errors=caught_errors,
+                                 sent_errors=sent_errors, caught_errors=caught_errors, fixed_errors=fixed_errors,
                                  sha_hash=sha_hash, received_hash=sha256(decompressed_file).digest().hex(), 
                                  sent_entropy=sent_entropy, received_entropy=calculate_entropy(decompressed_file))
 

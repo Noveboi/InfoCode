@@ -1,9 +1,6 @@
-from collections import Counter
 from os import path
-import numpy as np
-from compressor import get_compression_code, get_file
-from base64 import b64encode
 import polynomials as p
+from datetime import datetime
 
 try:
     log = open(path.abspath('./logs/process.txt'), 'w')
@@ -12,7 +9,7 @@ except:
 n = 0
 
 def cyclic_encode(code: dict[int, str], generator: list[int]):
-    print("Started encoding file into a cyclic linear code")
+    print(f"[{datetime.now()}] Started encoding file into a cyclic linear code")
     global log
     k = len(list(code.values())[0])
     deg = p.deg(generator)
@@ -78,20 +75,20 @@ def encode_file(file: bytes, code: dict[int, str], generator: list[int]) -> str:
     The encoded binary in string format
     """
     cyclic_code = cyclic_encode(code, generator)
-    print("Encoding process finished!")
+    print(f"[{datetime.now()}] Encoding process finished!")
 
     encoded_bin = ''
     for b in file:
         encoded_bin = ''.join((encoded_bin, cyclic_code[b]))
 
-    print("File encoded successfully!")
+    print(f"[{datetime.now()}] File encoded successfully!")
     return encoded_bin
 
 def convert_to_bytes(bins: list[str]) -> tuple[bytes, int]:
     k = len(bins[0])
     num_of_bytes = (k + 7) // 8
     byte_list = []
-    print(f"For each binary string of length {k}, generating {num_of_bytes} bytes")
+    print(f"[{datetime.now()}] For each binary string of length {k}, generating {num_of_bytes} bytes")
     # Each b is constant length k, same padding is applied foreach b
     for b in bins:
         padded_bin = b.zfill(num_of_bytes * 8)

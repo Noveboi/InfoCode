@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 def add_noise(enc: str, n: int, X: float) -> tuple[list[str], int]: 
     errors_generated = 0
@@ -13,7 +14,7 @@ def add_noise(enc: str, n: int, X: float) -> tuple[list[str], int]:
         else:
             new_enc += enc[i]
     
-    print(f"Generated {errors_generated} errors! ({errors_generated*100/len(enc)}% of bits flipped)")
+    print(f"[{datetime.now()}] Generated {errors_generated} errors! ({errors_generated*100/len(enc)}% of bits flipped)")
     code = []
     for i in range(0, len(enc), n):
         code.append(new_enc[i:i+n])

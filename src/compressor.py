@@ -1,10 +1,12 @@
 from collections import Counter
+from datetime import datetime
+
 
 def get_file(path):
     with open(path, 'rb') as f:
         bin_data = f.read()
 
-    print(f"Read {path} into memory")
+    print(f"[{datetime.now()}] Read {path} into memory")
     return bin_data
 
 def getProbabilities(binary: bytes):
@@ -12,7 +14,7 @@ def getProbabilities(binary: bytes):
     total_symbols = len(binary)
     probs = {symbol : occurs / total_symbols for symbol, occurs in symbol_occurences.items() }
     sorted_probs = list(reversed(sorted(probs.items(), key=lambda item: item[1])))
-    print("Calculated and sorted symbol occurence probabilities")
+    print(f"[{datetime.now()}] Calculated and sorted symbol occurence probabilities")
 
     return sorted_probs
 
@@ -33,7 +35,7 @@ def partition(probs: list):
 def generateCode(symbols: tuple):
     probs = symbols[0] + symbols[1]
     codes = {symbol : '' for symbol, _ in probs}
-    print("Beginning code generation using Fano-Shannon...")
+    print(f"[{datetime.now()}] Beginning code generation using Fano-Shannon...")
     return generateCodesDAC(symbols, codes)
 
 # codes will be a {symbol: code} dictionary
@@ -63,16 +65,16 @@ def add_padding(code: dict):
     for key in code.keys():
         pad_amount = max_digits - len(code[key])
         code[key] += '0'*pad_amount
-    print("Added padding to code")
+    print(f"[{datetime.now()}] Added padding to code")
 
 def get_compression_code(file: bytes) -> dict[int, str]:
     probs = getProbabilities(file)
     part = partition(probs)
     code = generateCode(part)
-    print("Finished generating codes using Fano-Shannon!")
+    print(f"[{datetime.now()}] Finished generating codes using Fano-Shannon!")
     add_padding(code)
 
-    print("Compression finished!")
+    print(f"[{datetime.now()}] Compression finished!")
     return code
 
 def decompress(bytes_list: list[list[int]], compression_code: dict[int, str]) -> bytes:
@@ -81,7 +83,7 @@ def decompress(bytes_list: list[list[int]], compression_code: dict[int, str]) ->
     for i, byte in enumerate([''.join(str(byte) for byte in byte_arr) for byte_arr in bytes_list]):
         try:
             decompressed_file.append(int(inverse_code[byte]))
-            
+
         # This exception is caught when the file at some point has had 2 or more errors in one byte segment,
         # thus resulting in incorrect decoding. 
         # This is natural, thus we ignore the KeyError exception and move on!

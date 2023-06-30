@@ -9,6 +9,7 @@ def convert_to_binary_str(file_bin: bytes, num_bytes: int, n: int) -> list[str]:
 
 def decode(enc_file: list[str], generator_polynomial: list[int], encoding: str) -> tuple[list[list[int]], int]:
     errors = 0
+    fixed = 0
     decoded = []
     n = len(enc_file[0])
     deg = p.deg(generator_polynomial)
@@ -27,6 +28,7 @@ def decode(enc_file: list[str], generator_polynomial: list[int], encoding: str) 
                 errors += 1
                 err = r.index(1)
                 q[err] = int(not q[err])
+                fixed += 1
             elif r.count(1) > 1:
                 errors += 1
 
@@ -34,9 +36,6 @@ def decode(enc_file: list[str], generator_polynomial: list[int], encoding: str) 
                 q.pop()
 
             decoded.append(q)
-        return (decoded, errors)
+        return (decoded, errors, fixed)
     else:
         return None
-
-def decompress(dec_file: list[str], compression_algorithm: str):
-    pass

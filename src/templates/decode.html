@@ -8,7 +8,15 @@
 </head>
 <body>
     <h1>Your file has been successfully decoded!</h1>
-    <h3 class="error_announce">There were {{ sent_errors - caught_errors }} uncaught errors</h3>
+    <h3 class="error_announce">
+        There were 
+        <span style="color: darkred;">{{ sent_errors - caught_errors }}</span> 
+        uncaught errors
+    </h3>
+    <h3 class="error_announce" style="color: #dd0000">
+        Out of the <span style="color: darkred;">{{ caught_errors }}</span> caught errors, 
+        <span style="color: darkred;">{{ fixed_errors }}</span> of them were fixed!
+    </h3>
     <table>
         <tr class="header_row">
             <th></th>
