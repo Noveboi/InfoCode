@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send a file!</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='basic_style.css') }}">
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <h2>Upload a file you want to send to the server!</h2>
+    <form method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+        <input id="file" name="file" type="file"><br>
+        <label for="noise">Specify error rate [0 - 1]: </label>
+        <input id="noise" name="noise" type="text"><br><br>
+        <input type="submit" value="Upload">
+      </form>
+</body>
+</html>

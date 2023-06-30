@@ -1,0 +1,33 @@
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    text-align: center;
+    font-size: 14px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+body > * {
+    margin-bottom: 20px;
+}
+
+tr * {
+    padding: 10px;
+}
+
+.error_announce {
+    color: red;
+    font-size: 32px;
+}
+
+.header_row > *, .header {
+    font-size: 18px;
+}

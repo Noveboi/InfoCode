@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File successfully decoded!</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='basic_style.css') }}">
+</head>
+<body>
+    <h1>Your file has been successfully decoded!</h1>
+    <h3 class="error_announce">There were {{ sent_errors - caught_errors }} uncaught errors</h3>
+    <table>
+        <tr class="header_row">
+            <th></th>
+            <th>Sent Message</th>
+            <th>Decoded Message</th>
+        </tr>
+        <tr>
+            <th class="header">Errors</th>
+            <td>{{ sent_errors }}</td>
+            <td>{{ caught_errors }}</td>
+        </tr>
+        <tr>
+            <th class="header">SHA256</th>
+            <td>{{ sha_hash }}</td>
+            <td> Not yet calculated! </td>
+        </tr>
+        <tr>
+            <th class="header">Entropy</th>
+            <td>{{ sent_entropy }}</td>
+            <td> Not yet calculated! </td>
+        </tr>
+    </table>
+</body>
+</html>
