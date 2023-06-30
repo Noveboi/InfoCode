@@ -23,13 +23,14 @@
         <tr>
             <th class="header">SHA256</th>
             <td>{{ sha_hash }}</td>
-            <td> Not yet calculated! </td>
+            <td> {{ received_hash }} </td>
         </tr>
         <tr>
             <th class="header">Entropy</th>
             <td>{{ sent_entropy }}</td>
-            <td> Not yet calculated! </td>
+            <td> {{ received_entropy }} </td>
         </tr>
     </table>
+    <h3>Entropy Difference: <span style="color: blueviolet;">{{ sent_entropy - received_entropy }}</span></h3>
 </body>
 </html>

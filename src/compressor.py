@@ -14,10 +14,6 @@ def getProbabilities(binary: bytes):
     sorted_probs = list(reversed(sorted(probs.items(), key=lambda item: item[1])))
     print("Calculated and sorted symbol occurence probabilities")
 
-    with open('occs.txt', 'w') as f:
-        for byte in dict(sorted(symbol_occurences.items(), key=lambda item: item[1])).keys():
-            f.write(f'{format(byte, "08b")} -----> {symbol_occurences[byte]}\n')
-
     return sorted_probs
 
 def partition(probs: list):
@@ -36,7 +32,7 @@ def partition(probs: list):
 
 def generateCode(symbols: tuple):
     probs = symbols[0] + symbols[1]
-    codes = {symbol : '' for symbol, prob in probs}
+    codes = {symbol : '' for symbol, _ in probs}
     print("Beginning code generation using Fano-Shannon...")
     return generateCodesDAC(symbols, codes)
 
@@ -79,8 +75,17 @@ def get_compression_code(file: bytes) -> dict[int, str]:
     print("Compression finished!")
     return code
 
-def decompress(bytes_list: list[list[int]]):
-    occurs = Counter([''.join(str(byte) for byte in byte_arr) for byte_arr in bytes_list])
-    with open('occs2.txt', 'w') as f:
-        for word in dict(sorted(occurs.items(), key=lambda item: item[1])).keys():
-            f.write(f'{word} -----> {occurs[word]}\n')
+def decompress(bytes_list: list[list[int]], compression_code: dict[int, str]) -> bytes:
+    inverse_code = {value: key for key, value in compression_code.items()}
+    decompressed_file = []
+    for i, byte in enumerate([''.join(str(byte) for byte in byte_arr) for byte_arr in bytes_list]):
+        try:
+            decompressed_file.append(int(inverse_code[byte]))
+            
+        # This exception is caught when the file at some point has had 2 or more errors in one byte segment,
+        # thus resulting in incorrect decoding. 
+        # This is natural, thus we ignore the KeyError exception and move on!
+        except KeyError as e:
+            print(f"Key error in i={i}")
+            print(e)
+    return bytes(decompressed_file)

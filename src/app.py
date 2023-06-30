@@ -7,11 +7,8 @@ from base64 import b64decode, b64encode
 from hashlib import sha256
 import json
 from entropy import calculate_entropy
-from secrets import token_hex
-
 
 app = flask.Flask(__name__)
-app.secret_key = token_hex(32)
 
 generator_polynomial = [1, 1, 0, 0, 0, 0, 1]
 gen_copy = generator_polynomial.copy()
@@ -31,19 +28,20 @@ def receive_file():
     gen_poly = message['parameters'][0]
     n = message['parameters'][1]
     num_bytes = message['parameters'][2]
+    comp_code = message['parameters'][3]
 
     sha_hash = message['SHA256']
     sent_entropy = message['entropy']
 
     msg_list = de.convert_to_binary_str(enc_file, num_bytes, n)
-    decoded_msg, caught_errors = de.decode(msg_list, generator_polynomial, encoding)
+    decoded_msg, caught_errors = de.decode(msg_list, gen_poly, encoding)
 
-    decompressed_msg = com.decompress(decoded_msg)
+    decompressed_file = com.decompress(decoded_msg, comp_code)
 
-    print(f"Found {caught_errors} errors!")
     return flask.render_template('decode.html', 
                                  sent_errors=sent_errors, caught_errors=caught_errors,
-                                 sha_hash=sha_hash, sent_entropy=sent_entropy)
+                                 sha_hash=sha_hash, received_hash=sha256(decompressed_file).digest().hex(), 
+                                 sent_entropy=sent_entropy, received_entropy=calculate_entropy(decompressed_file))
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -64,16 +62,15 @@ def upload():
             "encoded_message": str(b64_file),
             "compression_algorithm": "fano-shannon",
             "encoding": "cyclic",
-            "parameters": [gen_copy, en.n, num_bytes],
+            "parameters": [gen_copy, en.n, num_bytes, comp_code],
             "errors": errors,
-            "SHA256": str(sha256(file).digest().hex()),
+            "SHA256": sha256(file).digest().hex(),
             "entropy": calculate_entropy(file)
         }
 
         global json_message
         json_message = json.dumps(message)
 
-        print("Sending: ", errors)
         return flask.redirect(flask.url_for('receive_file'))
     
 if __name__ == '__main__':

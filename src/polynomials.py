@@ -20,7 +20,7 @@ def deg(x: list[int]):
 
 def xor(x: list[int], y: list[int]):
     if len(x) != len(y): 
-        raise ValueError("x XOR y requires x and y to have equal length!")
+        raise ValueError(f"x XOR y requires x and y to have equal length! len(x) = {len(x)} | len(y) = {len(y)}")
     l = len(x)
     result = [0 for _ in range(l)]
     for i in range(l):

@@ -12,6 +12,8 @@ def decode(enc_file: list[str], generator_polynomial: list[int], encoding: str) 
     decoded = []
     n = len(enc_file[0])
     deg = p.deg(generator_polynomial)
+    generator_polynomial += [0] * (n - deg - 1)
+
     if encoding == 'cyclic':
         for bin_str in enc_file:
             codeword = [int(bit) for bit in bin_str]
