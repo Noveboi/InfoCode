@@ -2,6 +2,9 @@ import random
 from datetime import datetime
 
 def add_noise(enc: str, n: int, X: float) -> tuple[list[str], int]: 
+    """
+    Add X% noise to a pure binary string 
+    """
     errors_generated = 0
     new_enc = ""
     if X < 0 or X > 1: 

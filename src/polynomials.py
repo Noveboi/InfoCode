@@ -1,4 +1,9 @@
 def shift(arr, shamt):
+    """
+    Cyclically shifts the elements of 'arr' by 'shamt' bits
+
+    e.g: arr = [x0, x1, x2, x3], then shift(arr, 1) = [x3, x0, x1, x2]
+    """
     n = len(arr)
     if (shamt < 0) or shamt % n == 0:
         return arr
@@ -15,10 +20,16 @@ def shift(arr, shamt):
     return new_arr
 
 def deg(x: list[int]):
+    """
+    Gets the degree of a polynomial representation as a list of coefficients
+    """
     idxs = [i for i, coef in enumerate(x) if coef == 1]
     return max(idxs) if len(idxs) != 0 else 0
 
 def xor(x: list[int], y: list[int]):
+    """
+    Perform the bitwise XOR operation for every bit of x and y
+    """
     if len(x) != len(y): 
         raise ValueError(f"x XOR y requires x and y to have equal length! len(x) = {len(x)} | len(y) = {len(y)}")
     l = len(x)

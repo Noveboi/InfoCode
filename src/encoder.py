@@ -2,6 +2,7 @@ from os import path
 import polynomials as p
 from datetime import datetime
 
+# Have a log file open for the purposes of showing the encoding process!
 try:
     log = open(path.abspath('./logs/process.txt'), 'w')
 except:
@@ -9,6 +10,22 @@ except:
 n = 0
 
 def cyclic_encode(code: dict[int, str], generator: list[int]):
+    """
+    For each binary string in the code dictionary, perform polynomial multiplication.
+
+    Clarification
+    --------
+    Here, we express polynomials with coefficients in {0, 1} as lists of ints
+
+    e.g: [1,0,1,1,0] is equivalent to 1 + x^2 + x^3
+
+    Process
+    --------
+    For each binary string in the code dictionary, we say that it represents the 
+    coefficients of the polynomial m(x). Moreover, we say that the generator coefficients represent g(x).
+
+    To obtain a cyclic linear codeword, we simply do c(x) = m(x)g(x)
+    """
     print(f"[{datetime.now()}] Started encoding file into a cyclic linear code")
     global log
     k = len(list(code.values())[0])
@@ -85,6 +102,9 @@ def encode_file(file: bytes, code: dict[int, str], generator: list[int]) -> str:
     return encoded_bin
 
 def convert_to_bytes(bins: list[str]) -> tuple[bytes, int]:
+    """
+    Converts binary string representations to bytes
+    """
     k = len(bins[0])
     num_of_bytes = (k + 7) // 8
     byte_list = []
